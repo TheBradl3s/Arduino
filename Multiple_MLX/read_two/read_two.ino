@@ -3,6 +3,10 @@
 // Original code by chrisramsay (http://www.chrisramsay.co.uk/posts/2014/09/arduino-and-multiple-mlx90614-sensors/)
 // Modified by TheBradl3s
 
+// I2C Blue - A4
+// I2C Green - A5
+// Use 4K7 ohm pull up resistors on both with 0.1uF bridging between + & -
+
  byte Sensor1 = 0x01;
  byte Sensor2 = 0x02;
 

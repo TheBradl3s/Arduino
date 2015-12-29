@@ -1,5 +1,11 @@
 #include "i2cmaster.h"
 
+// Original code by chrisramsay (http://www.chrisramsay.co.uk/posts/2014/09/arduino-and-multiple-mlx90614-sensors/)
+// Written for Arudino Uno
+// I2C Blue - A4
+// I2C Green - A5
+// Use 4K7 ohm pull up resistors on both with 0.1uF bridging between + & - for I2c bus
+
 // remap_mlx90614.ino
 
  // New slave address, purposefully left shifted
