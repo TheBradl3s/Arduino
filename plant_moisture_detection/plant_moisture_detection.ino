@@ -11,6 +11,14 @@
  *  Using analog input A1 with a 10k pull-down resistor.
  */
 
+ /*
+  * FUTURE PLANS:
+  *     - Get out of prototype stage
+  *     - Add LCD to display moisture
+  *     - Add LDR photo sensor to dim LCD/LED when it's dark (bright lights are annoying yo)
+  *     - Add Interior/Exterior Temprature + humidity
+  */
+
 #include "FastLED.h"
 #define NUM_LEDS 1
 #define DATA_PIN 2 // For PL9823 LED data pin
