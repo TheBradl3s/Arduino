@@ -19,6 +19,7 @@
 CRGB leds[NUM_LEDS];
 
 int ledStartRGB = 100; //96 = red
+int ledBrightness = 80; //0 - 255
 
 void setup() {
   Serial.begin(9600); 
@@ -41,34 +42,34 @@ void loop() {
   */
   
   if (moistureRAW == 0) {
-    FastLED.showColor(CHSV(ledStartRGB, 255, 100)); 
+    FastLED.showColor(CHSV(ledStartRGB, 255, ledBrightness)); 
   }
   else if (moistureRAW > 0 && moistureRAW < 50) {
-    FastLED.showColor(CHSV(ledStartRGB - 10.6, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 10.6, 255, ledBrightness));
   }  
   else if (moistureRAW > 50 && moistureRAW < 100) {
-    FastLED.showColor(CHSV(ledStartRGB - 21.2, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 21.2, 255, ledBrightness));
   }
   else if (moistureRAW > 100 && moistureRAW < 150) {
-    FastLED.showColor(CHSV(ledStartRGB - 31.8, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 31.8, 255, ledBrightness));
   }
   else if (moistureRAW > 150 && moistureRAW < 200) {
-    FastLED.showColor(CHSV(ledStartRGB - 42.4, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 42.4, 255, ledBrightness));
   }
   else if (moistureRAW > 200 && moistureRAW < 250) {
-    FastLED.showColor(CHSV(ledStartRGB - 53, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 53, 255, ledBrightness));
   }
   else if (moistureRAW > 250 && moistureRAW < 300) {
-    FastLED.showColor(CHSV(ledStartRGB - 63.6, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 63.6, 255, ledBrightness));
   }
   else if (moistureRAW > 300 && moistureRAW < 350) {
-    FastLED.showColor(CHSV(ledStartRGB - 74.2, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 74.2, 255, ledBrightness));
   }
   else if (moistureRAW > 350 && moistureRAW < 400) {
-    FastLED.showColor(CHSV(ledStartRGB - 84.8, 255, 100));
+    FastLED.showColor(CHSV(ledStartRGB - 84.8, 255, ledBrightness));
   }
   else if (moistureRAW > 400) {
-    FastLED.showColor(CHSV(0, 255, 100));
+    FastLED.showColor(CHSV(0, 255, ledBrightness));
   }  
   delay(1000);
 }
