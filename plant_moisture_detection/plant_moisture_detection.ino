@@ -9,6 +9,9 @@
  *  
  *  Moisture Probe consists of 2 M3 Stainless steel bolts spaced 2cm apart placed into the dirt of the plant.
  *  Using analog input A1 with a 10k pull-down resistor.
+ *  
+ *  Button 1: A4 (+ 10k pull-down)
+ *  Button 2: A5 (+ 10k pull-down)
  */
 
 /*
@@ -25,8 +28,8 @@
  /*
   * FUTURE PLANS:
   *     - Get out of prototype stage
-  *     - Add LCD to display moisture
-  *     - Add LDR photo sensor to dim LCD/LED when it's dark (bright lights are annoying yo)
+  *     - Add LCD to display moisture - DONE
+  *     - Add LDR photo sensor to dim LCD/LED when it's dark (bright lights are annoying yo) - DONE
   *     - Add Interior/Exterior Temprature + humidity
   */
 
@@ -41,9 +44,11 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
+int menu = 1; //default startup screen
+int submenu = 1; //default submenu screen
 int moistureRAW; int LDR;
 int ledStartRGB = 100; //96 = red
-// int ledBrightness = 80; //0 - 255
+int ledBrightness; //0 - 255
 
 void setup() {
 
@@ -63,26 +68,51 @@ void loop() {
   int moistureRAW = analogRead(A1);
   int LDR = analogRead(A0);
 
-  // print out the value you read:
-  Serial.print("moisture raw: ");
-  Serial.println(moistureRAW);
-  Serial.print("LDR Value: ");
-  Serial.println(LDR);
-
   if (dark(LDR) == true) {
-    MoistureDisplay(30, moistureRAW);
+    ledBrightness = 30;
     digitalWrite(6, LOW);
   }
   else {
-    MoistureDisplay(100, moistureRAW);
+    ledBrightness = 100;
     digitalWrite(6, HIGH);
+  }  
+
+  switch (menu) {
+    case 1:
+      MoistureDisplay(ledBrightness, moistureRAW, submenu);
+      break;
+    case 2:
+      lcd.clear();
+      lcd.print("Menu 2");
+      break;
+    case 3:
+      lcd.clear();
+      lcd.print("Menu 3");
+      break;
+  }
+  
+
+  if (digitalRead(18) == HIGH) {
+    delay(300);
+    if (menu == 3){
+      menu = 0;
+    }
+    menu++;
   }
 
-  delay(1000);
-    
+  if (digitalRead(19) == HIGH) {
+    delay(300);
+    if (submenu == 2){
+      submenu = 0;
+    }
+    submenu++;
+  }
+
+  delay(200); 
 }
 
-void MoistureDisplay(int ledBrightness, int moisture) {
+void MoistureDisplay(int ledBrightness, int moisture, int menutype) {
+  //Display type either 1 (bar display) or 2 (numerical display)
   // Filthy way of changing LED colour per moisture level.  Probably a cleaner way to do this.
   /* 
    *  NOTES FOR ME SO I CAN REMEMBER WHY I DO STUFF:
@@ -91,67 +121,159 @@ void MoistureDisplay(int ledBrightness, int moisture) {
    *  steps of 50.  I simply decrement the hue value by (ledStartRGB/(numberOfStatements)) to get a nice clean transition.
   */
  
+  delay(100);
   lcd.clear();
   lcd.print(" Moisture Value ");
   lcd.setCursor(0, 1);
   // lcd.print(moistureRAW);
   
   if (moisture == 0) {
-    lcd.print(" |------------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |------------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }
     FastLED.showColor(CHSV(ledStartRGB, 255, ledBrightness));     
   }
   else if (moisture > 0 && moisture < 50) {
-    lcd.print(" |X-----------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |X-----------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 8, 255, ledBrightness));
   }  
   else if (moisture > 50 && moisture < 100) {
-    lcd.print(" |-X----------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |-X----------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 16, 255, ledBrightness));
   }
   else if (moisture > 100 && moisture < 150) {
-    lcd.print(" |--X---------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |--X---------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 24, 255, ledBrightness));
   }
   else if (moisture > 150 && moisture < 200) {
-    lcd.print(" |---X--------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |---X--------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 32, 255, ledBrightness));
   }
   else if (moisture > 200 && moisture < 250) {
-    lcd.print(" |----X-------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |----X-------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 40, 255, ledBrightness));
   }
   else if (moisture > 250 && moisture < 300) {
-    lcd.print("|-----X------|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |-----X------|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 48, 255, ledBrightness));
   }
   else if (moisture > 300 && moisture < 350) {
-    lcd.print(" |------X-----|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |------X-----|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 56, 255, ledBrightness));
   }  
   else if (moisture > 350 && moisture < 400) {
-    lcd.print(" |-------X----|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |-------X----|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 64, 255, ledBrightness));
   }
   else if (moisture > 400 && moisture < 450) {
-    lcd.print("|--------X---|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |--------X---|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 72, 255, ledBrightness));
   }
   else if (moisture > 450 && moisture < 500) {
-    lcd.print(" |---------X--|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |---------X--|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 80, 255, ledBrightness));
   }
   else if (moisture > 500 && moisture < 550) {
-    lcd.print(" |----------X-|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |----------X-|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(ledStartRGB - 88, 255, ledBrightness));
   }      
   else if (moisture > 600) {
-    lcd.print(" |--MOIST-AF--|");
+    switch (menutype) {
+      case 1:
+        lcd.print(" |--MOIST-AF--|");
+        break;
+      case 2:
+        lcd.print(moisture);
+        break;
+    }    
     FastLED.showColor(CHSV(0, 255, ledBrightness));
   }  
 }
 
 bool dark(int LDRvalue) {
-  if (LDRvalue < 600) {
+  if (LDRvalue < 400) {
     return true;
   }
   else {
